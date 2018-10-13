@@ -30,39 +30,57 @@ public class MultiClientHandle implements Runnable{
     private Socket socket;
     private Thread thread;
     private DataInputStream dis;
-    public MultiClientHandle(Socket socket){
+    private int index;
+    
+    public MultiClientHandle(Socket socket, int index){
         this.socket = socket;
+        this.index = index;
+        
+        //intialize the socket reader 
         try{
             dis = new DataInputStream(socket.getInputStream());
         } catch(IOException ex){
             JOptionPane.showMessageDialog(null, ex);
         }
+        
+        // initialize the this client thread and invoke
         thread = new Thread(this);
         thread.start();
     }
+    /**
+     * @param running flag for thread looping
+     */
+    private boolean running = true;
+    
     @Override
     public void run() {
-        while(! socket.isClosed()){
-            String messString;
+        String messString;
+        while(! socket.isClosed() && running){   
             try{
+                // read a message from connected client
                 messString = dis.readUTF();
-                for(int i=0; i<Opening.list.size(); i++){
-                    if(Opening.list.get(i) == socket) continue;
-                    if(! Opening.list.get(i).isClosed()){
-                        try{
-                            new DataOutputStream(Opening.list.get(i).getOutputStream()).
-                                    writeUTF(messString);
-                        }catch(IOException ex){
-                            JOptionPane.showMessageDialog(null, ex);
-                            Opening.list.remove(i);
-                            continue;
-                        }
-                    }
-                }
+                // send this message to others
+                sendMessage(messString);
             } catch(IOException ex){
-                JOptionPane.showMessageDialog(null, ex);;
+                running = false;
+                Opening.list.remove(index);
+                sendMessage("SERVER: "+socket.getInetAddress()+" removed");
             }
         }
     }
-    
+    private void sendMessage(String message){
+        for(Socket reciver : Opening.list){
+            // ignore to write self
+            if(reciver == socket)
+                continue;
+            
+            try{
+                new DataOutputStream(reciver.getOutputStream()).writeUTF(message);
+            } catch(IOException ex){
+                JOptionPane.showMessageDialog(null, ex);
+            } finally{
+                continue;
+            }
+        }
+    }
 }

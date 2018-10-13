@@ -457,7 +457,7 @@ public class Opening extends JPanel{
                                         parseInt(portField.getText()));
                                     new ChatPanel(frame, socket, name.getText());
                                 } catch(IOException ex){
-                                    
+                                    JOptionPane.showMessageDialog(null, ex);
                                 } catch(InterruptedException ex){
                                     JOptionPane.showMessageDialog(null, ex);
                                 }
@@ -466,8 +466,9 @@ public class Opening extends JPanel{
                         
                         list = new ArrayList<>(); // socket list initialize
                         new Thread(new Runnable(){
+                            private boolean serverRunning = true;
                             public void run(){
-                                while(!ss.isClosed()){
+                                while(!ss.isClosed() && serverRunning){
                                     try {
                                         /**
                                          * Every time server socket accept a socket request it
@@ -476,9 +477,10 @@ public class Opening extends JPanel{
                                          */
                                         Socket s = ss.accept();
                                         list.add(s);
-                                        new MultiClientHandle(s);
+                                        new MultiClientHandle(s,list.size()-1);
                                     } catch (IOException ex){
                                         JOptionPane.showMessageDialog(null, ex);
+                                        serverRunning = false;
                                     }
                                 }
                             }
