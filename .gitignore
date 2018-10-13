@@ -1,3 +1,4 @@
 # ignore class path
 *.class
 build/*
+dist/*
