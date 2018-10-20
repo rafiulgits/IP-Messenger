@@ -206,10 +206,10 @@ public class Opening extends JPanel{
         portField.setFont(font);
         o2oPanel.add(portField);
         
-        JTextField name = new JTextField("annonymous");
-        name.setBounds(105, 300, 200, 30);
-        name.setFont(font);
-        o2oPanel.add(name);
+        JTextField nameField = new JTextField("annonymous");
+        nameField.setBounds(105, 300, 200, 30);
+        nameField.setFont(font);
+        o2oPanel.add(nameField);
         
         /**
          * Set action Listener for radio buttons
@@ -251,9 +251,15 @@ public class Opening extends JPanel{
                          * will try to make connection with given IP's port and after accepted 
                          * by the sever ChatPanel will call for messaging view.
                          */
-                        Socket socket = new Socket(ipField.getText(), Integer.parseInt(portField.getText()));
-                        socket.setSoTimeout(100000);
-                        new ChatPanel(frame, socket, name.getText());
+                        
+                        // check the name 
+                        String name = nameField.getText().trim();
+                        if(! isAValidName(name))
+                            return;
+                        
+                        int port = Integer.parseInt(portField.getText());
+                        Socket socket = new Socket(ipField.getText(), port);
+                        new ChatPanel(frame, socket , name, false);
                         
                     } catch (IOException ex) {
                         /**
@@ -268,10 +274,17 @@ public class Opening extends JPanel{
                          * For create a new chat box there need to create a ServerSocket.
                          * After server socket accept the requested socket ChatPanel will called.
                          */
-                        ServerSocket ss = new ServerSocket(Integer.parseInt(portField.getText()));
-                        ss.setSoTimeout(100000);
+                        
+                        // check the name 
+                        String name = nameField.getText().trim();
+                        if(! isAValidName(name))
+                            return;
+                        
+                        int port = Integer.parseInt(portField.getText());
+                        
+                        ServerSocket ss = new ServerSocket(port);
                         Socket socket = ss.accept();
-                        new ChatPanel(frame, socket, name.getText());
+                        new ChatPanel(frame, socket, name, false);
                         
                     } catch(IOException ex){
                         /**
@@ -367,10 +380,10 @@ public class Opening extends JPanel{
         portField.setFont(font);
         m2mPanel.add(portField);
         
-        JTextField name = new JTextField("annonymous");
-        name.setBounds(105, 300, 200, 30);
-        name.setFont(font);
-        m2mPanel.add(name);
+        JTextField nameField = new JTextField("annonymous");
+        nameField.setBounds(105, 300, 200, 30);
+        nameField.setFont(font);
+        m2mPanel.add(nameField);
         
         /**
          * add action on radio buttons.
@@ -409,10 +422,16 @@ public class Opening extends JPanel{
                      * To join a server socket just create a socket request to the server
                      * socket.
                      */
+                    
+                    // check the name 
+                    String name = nameField.getText().trim();
+                    if(! isAValidName(name))
+                        return;
+
+                    int port = Integer.parseInt(portField.getText());
                     try{
-                        Socket socket = new Socket(InetAddress.getLocalHost(),Integer.
-                                        parseInt(portField.getText()));
-                        new ChatPanel(frame, socket, name.getText());
+                        Socket socket = new Socket(InetAddress.getLocalHost(),port);
+                        new ChatPanel(frame, socket, name, true);
                     }catch(IOException ex){
                         JOptionPane.showMessageDialog(null, ex);
                     }
@@ -436,8 +455,15 @@ public class Opening extends JPanel{
                          * 
                          * @see MultiClientHandle
                          */
-                        ServerSocket ss = new ServerSocket(Integer.parseInt(portField.getText()));
-                        ss.setSoTimeout(100000);
+                        
+                        // check the name 
+                        String name = nameField.getText().trim();
+                        if(! isAValidName(name))
+                            return;
+                        
+                        int port = Integer.parseInt(portField.getText());
+                        
+                        ServerSocket ss = new ServerSocket(port);
                         
                         
                         /**
@@ -453,9 +479,8 @@ public class Opening extends JPanel{
                                      * is bound. So 200 millisecond is for server socket bound.
                                      */
                                     Thread.sleep(200);
-                                    Socket socket = new Socket(InetAddress.getLocalHost(),Integer.
-                                        parseInt(portField.getText()));
-                                    new ChatPanel(frame, socket, name.getText());
+                                    Socket socket = new Socket(InetAddress.getLocalHost(),port);
+                                    new ChatPanel(frame, socket, name, true);
                                 } catch(IOException ex){
                                     JOptionPane.showMessageDialog(null, ex);
                                 } catch(InterruptedException ex){
@@ -495,5 +520,19 @@ public class Opening extends JPanel{
         remove(contentPanel);
         add(m2mPanel);
         repaint();
+    }
+    
+    private boolean isAValidName(String name){
+        if(name.length() < 4){
+            // name at least 4 length
+            JOptionPane.showMessageDialog(null, "Name must carry at least 4 char");
+            return false;
+        }
+        if(!Character.isAlphabetic(name.charAt(0))){
+            // name must be started with an alphabat
+            JOptionPane.showMessageDialog(null, "Name must be started with an alphabet");
+            return false;
+        }
+        return true;
     }
 }
