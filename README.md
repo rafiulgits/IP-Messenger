@@ -5,7 +5,7 @@
 ## Before Use:
    File transferring system only can use in signle chat or one-to-on system.
    For transfer file messenger will create another socket with same host address; but the 
-   port will be create by using: senderSocket.port - 10
+   port will be create by using: 49600
    So be carefull about initial port for messenger socket connection.
    
       Default file receive location Document/IP_Messenger
