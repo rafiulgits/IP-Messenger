@@ -155,7 +155,6 @@ public class ChatPanel extends JPanel{
                              * file transfer.
                              */
                             dis.readBoolean();
-                            System.out.println("Confirmation to receive");
                             receiver.start();
                             /**
                              * unable to access file UI components when an operation 
@@ -268,17 +267,21 @@ public class ChatPanel extends JPanel{
                      * Next sent the host address and port
                      * Next sent the file name and file size
                      */ 
+                    
+                    // port to connect
+                    int port = 49600;
+                    
                     dos.writeUTF("1");
                     
                     // send the host and port
                     dos.writeUTF(socket.getInetAddress().getHostAddress());
-                    dos.writeInt(socket.getPort()-10);
+                    dos.writeInt(port);
                     
                     // send the file name and file length
                     dos.writeUTF(file.getAbsoluteFile().getName());
                     dos.writeLong(file.getAbsoluteFile().length());
                     
-                    FileSender fileSender = new FileSender(socket.getPort()-10) {
+                    FileSender fileSender = new FileSender(port) {
                         @Override
                         public void onFileProgress(int progress){
                             bar.setValue(progress);

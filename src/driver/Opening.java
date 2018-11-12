@@ -465,10 +465,13 @@ public class Opening extends JPanel{
                         
                         ServerSocket ss = new ServerSocket(port);
                         
-                        
+                        list = new ArrayList<>(); // socket list initialize
+                        Socket fc = ss.accept();
+                        list.add(fc);
+                        new MultiClientHandle(fc,list.size()-1);
                         /**
-                         * When user create a new chat box, user is the first client of this chat
-                         * box. 
+                         * When user create a new chat box, user is the second client of this chat
+                         * box. This thread will be executed after first client added.
                          * So here a socket will created for the server created user.
                          */
                         new Thread(new Runnable(){
@@ -478,18 +481,14 @@ public class Opening extends JPanel{
                                      * As this is a thread so it must created after server socket
                                      * is bound. So 200 millisecond is for server socket bound.
                                      */
-                                    Thread.sleep(200);
                                     Socket socket = new Socket(InetAddress.getLocalHost(),port);
                                     new ChatPanel(frame, socket, name, true);
                                 } catch(IOException ex){
                                     JOptionPane.showMessageDialog(null, ex);
-                                } catch(InterruptedException ex){
-                                    JOptionPane.showMessageDialog(null, ex);
-                                }
+                                } 
                             }
                         }).start();
                         
-                        list = new ArrayList<>(); // socket list initialize
                         new Thread(new Runnable(){
                             private boolean serverRunning = true;
                             public void run(){
