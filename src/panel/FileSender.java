@@ -29,14 +29,14 @@ import javax.swing.JProgressBar;
  *
  * @author rafiul islam
  */
-public abstract class FileSender extends Thread implements FileFinishListener{
+public abstract class FileSender extends Thread implements FileProgressListener{
     
     private JProgressBar bar;
     private int port;
     private File file;
     private Socket socket;
     
-    private FileFinishListener fileListener = this;
+    private FileProgressListener fileListener = this;
     
     public FileSender(int port){
         this.port = port;
@@ -60,7 +60,7 @@ public abstract class FileSender extends Thread implements FileFinishListener{
             byte[] kb_64 = new byte[1024*64];
             int len; long sent = 0;
             while((len = fis.read(kb_64)) > 0){
-                bos.write(kb_64);
+                bos.write(kb_64, 0, len);
                 sent += len;
                 fileListener.onFileProgress(FileProgress.getProgress(file.length(), sent));
              }

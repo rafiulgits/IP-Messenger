@@ -33,6 +33,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
+import panel.AndroidPanel;
 import panel.ChatPanel;
 
 /**
@@ -125,6 +126,20 @@ public class Opening extends JPanel{
             }
         });
         contentPanel.add(manyToMany);
+        
+        /**
+         * Create a button on content panel for android-pc connection choose.
+        */
+        JButton androidPC = new JButton();
+        androidPC.setText("Android");
+        androidPC.setBounds(100, 250, 150, 40);
+        androidPC.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                androidConnectOptions();
+            }
+        });
+        contentPanel.add(androidPC);
     }
     
     private void singleChatOptions(){
@@ -518,6 +533,82 @@ public class Opening extends JPanel{
         
         remove(contentPanel);
         add(m2mPanel);
+        repaint();
+    }
+    
+    private void androidConnectOptions(){
+        /**
+         * create a new panel that will show the one-one connection stuffs.
+         */
+        JPanel o2oPanel = new JPanel();
+        o2oPanel.setLayout(null);
+        o2oPanel.setBackground(Color.LIGHT_GRAY);
+        o2oPanel.setBounds(0, 100, 350, 420);
+        
+        /**
+         * This font will display on every label
+         */
+        Font font = new Font("arial",Font.BOLD,15);
+        
+                /**
+         * Label for IP and port.
+        */
+        JLabel ipLabel = new JLabel("IP");
+        ipLabel.setFont(font);
+        ipLabel.setBounds(20, 200, 80, 40);
+        o2oPanel.add(ipLabel);
+        
+        JLabel portLabel = new JLabel("PORT");
+        portLabel.setFont(font);
+        portLabel.setBounds(20, 250, 100, 40);
+        o2oPanel.add(portLabel);
+        
+        /**
+         * Text Field for input IP and port.
+         */
+        JTextField ipField = new JTextField();
+        ipField.setText("localhost");
+        ipField.setBounds(105, 200, 180, 40);
+        ipField.setFont(font);
+        o2oPanel.add(ipField);
+        
+        JTextField portField = new JTextField();
+        portField.setText("9876");
+        portField.setBounds(105, 250, 60, 40);
+        portField.setFont(font);
+        o2oPanel.add(portField);
+        
+        /**
+         * This Button will for create a socket request or server socket request.
+         */
+        JButton requst = new JButton("Request");
+        requst.setFont(font);
+        requst.setBounds(100, 350, 150, 40);
+        Socket socket;
+        requst.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+//                try{
+//                    int port = Integer.parseInt(portField.getText());
+//                    Socket socket = new Socket(ipField.getText(), port);
+//                    
+//                    // new chat panel
+//                } catch(IOException ex){
+//                    JOptionPane.showMessageDialog(null, ex);
+//                }
+                new AndroidPanel(frame);
+            }
+        });
+        
+        /**
+         * add this one-one panel on main panel after remove the previous one and repaint 
+         * the main panel.
+         */
+        o2oPanel.add(requst);
+        
+        remove(contentPanel);
+        add(o2oPanel);
+        
         repaint();
     }
     

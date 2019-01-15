@@ -29,7 +29,7 @@ import javax.swing.filechooser.FileSystemView;
  *
  * @author rafiul islam
  */
-public abstract class FileReceiver extends Thread implements FileFinishListener{
+public abstract class FileReceiver extends Thread implements FileProgressListener{
     
     private String host;
     private int port;
@@ -39,7 +39,7 @@ public abstract class FileReceiver extends Thread implements FileFinishListener{
     private long fileSize;
     private JProgressBar bar;
     
-    private FileFinishListener fileListener = this;
+    private FileProgressListener fileListener = this;
     
     public FileReceiver(String host, int port){
         this.host = host;

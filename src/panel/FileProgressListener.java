@@ -19,7 +19,7 @@ package panel;
  *
  * @author rafiul islam
  */
-public interface FileFinishListener {
+public interface FileProgressListener {
     public static final int STATE_RECEIVED = 1;
     public static final int STATE_SENT = 0;
     public static final int DONE = -1;
