@@ -59,15 +59,12 @@ public class AndroidPanel extends JPanel{
     
     private Socket socket;
     private String name;
-    private DataInputStream dis;
     private DataOutputStream dos;
-    private BufferedOutputStream bos;
-    private BufferedInputStream bis;
     
-    
-    public AndroidPanel(JFrame frame){
+    public AndroidPanel(JFrame frame, Socket socket){
         
         this.frame = frame;
+        this.socket = socket;
         
         setBackground(Color.DARK_GRAY);
         setLayout(null);
@@ -82,19 +79,22 @@ public class AndroidPanel extends JPanel{
         pane.setLayout(null);
         pane.add(this);
         pane.repaint();
-    }
-    
-    private void initStreams(){
-        try{
-            dis = new DataInputStream(socket.getInputStream());
-            dos = new DataOutputStream(socket.getOutputStream());
-            bis = new BufferedInputStream(socket.getInputStream());
-            bos = new BufferedOutputStream(socket.getOutputStream());
-        }catch(IOException ex){
+        
+        new AndroidP2P.Receiver(socket, receivingFileLabel) {
+            @Override
+            public void onFileProgress(int progress) {
+                receivingProgress.setValue(progress);
+            }
             
-        }
+            @Override
+            public void onFileFinish(int state) {
+                if(state == DONE){
+                    receivingProgress.setValue(receivingProgress.getMaximum());
+                }
+            }
+        };
     }
-    
+ 
     private void setFileContent(){
         Font f = new Font("arial", Font.BOLD, 15);
         receivingFileLabel = new JLabel("No File Receiving");
@@ -195,6 +195,12 @@ public class AndroidPanel extends JPanel{
     }
     
     private void setCommandContent(){
+        try{
+            dos = new DataOutputStream(socket.getOutputStream());
+        } catch(IOException ex){
+            
+        }
+        
         btRing = new JButton("Mobile in Ring Mode");
         btRing.setBounds(50, 40, 250, 50);
         btRing.addActionListener(new ActionListener() {
@@ -202,9 +208,9 @@ public class AndroidPanel extends JPanel{
             public void actionPerformed(ActionEvent e) {
                 if(fileSelected) return;
                 try{
-                    DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
                     dos.writeShort(AndroidP2P.RECEIVE_TYPE_COMMAND);
                     dos.writeShort(AndroidP2P.RING_MODE);
+                    dos.flush();
                 } catch(IOException ex){
                     
                 }
@@ -218,9 +224,9 @@ public class AndroidPanel extends JPanel{
             public void actionPerformed(ActionEvent e) {
                 if(fileSelected) return;
                 try{
-                    DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
                     dos.writeShort(AndroidP2P.RECEIVE_TYPE_COMMAND);
                     dos.writeShort(AndroidP2P.SILENT_MODE);
+                    dos.flush();
                 } catch(IOException ex){
                     
                 }
@@ -234,9 +240,9 @@ public class AndroidPanel extends JPanel{
             public void actionPerformed(ActionEvent e) {
                 if(fileSelected) return;
                 try{
-                    DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
                     dos.writeShort(AndroidP2P.RECEIVE_TYPE_COMMAND);
                     dos.writeShort(AndroidP2P.SILENT_MODE);
+                    dos.flush();
                 } catch(IOException ex){
                     
                 }

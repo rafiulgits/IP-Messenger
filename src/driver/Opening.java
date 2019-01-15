@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
@@ -33,6 +34,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import panel.AndroidPanel;
 import panel.ChatPanel;
 
@@ -550,12 +552,15 @@ public class Opening extends JPanel{
          */
         Font font = new Font("arial",Font.BOLD,15);
         
-                /**
-         * Label for IP and port.
-        */
-        JLabel ipLabel = new JLabel("IP");
+        JLabel ipLabel = new JLabel();
+        try{
+            ipLabel.setText("Your Host: "+InetAddress.getLocalHost().getHostAddress());
+        } catch(UnknownHostException ex){
+            
+        }
         ipLabel.setFont(font);
-        ipLabel.setBounds(20, 200, 80, 40);
+        ipLabel.setBounds(10, 100, 325, 100);
+        ipLabel.setHorizontalAlignment(SwingConstants.CENTER);
         o2oPanel.add(ipLabel);
         
         JLabel portLabel = new JLabel("PORT");
@@ -564,13 +569,8 @@ public class Opening extends JPanel{
         o2oPanel.add(portLabel);
         
         /**
-         * Text Field for input IP and port.
+         * Text Field for input port
          */
-        JTextField ipField = new JTextField();
-        ipField.setText("localhost");
-        ipField.setBounds(105, 200, 180, 40);
-        ipField.setFont(font);
-        o2oPanel.add(ipField);
         
         JTextField portField = new JTextField();
         portField.setText("9876");
@@ -581,22 +581,21 @@ public class Opening extends JPanel{
         /**
          * This Button will for create a socket request or server socket request.
          */
-        JButton requst = new JButton("Request");
+        JButton requst = new JButton("Create Server");
         requst.setFont(font);
         requst.setBounds(100, 350, 150, 40);
         Socket socket;
         requst.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-//                try{
-//                    int port = Integer.parseInt(portField.getText());
-//                    Socket socket = new Socket(ipField.getText(), port);
-//                    
-//                    // new chat panel
-//                } catch(IOException ex){
-//                    JOptionPane.showMessageDialog(null, ex);
-//                }
-                new AndroidPanel(frame);
+                try{
+                    int port = Integer.parseInt(portField.getText().toString().trim());
+                    ServerSocket ss = new ServerSocket(port);
+                    Socket socket = ss.accept();
+                    new AndroidPanel(frame, socket);
+                } catch(IOException ex){
+                    
+                }
             }
         });
         

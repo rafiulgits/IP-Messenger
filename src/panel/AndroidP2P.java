@@ -24,6 +24,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import javax.swing.JLabel;
 import javax.swing.filechooser.FileSystemView;
 
 /**
@@ -53,6 +54,8 @@ public class AndroidP2P {
         public Sender(Socket socket, File file){
             this.socket = socket;
             this.file = file;
+            
+            this.start();
         }
         
         
@@ -97,9 +100,13 @@ public class AndroidP2P {
        
         private FileProgressListener fpl = this;
         private Socket socket;
+        private JLabel label;
         
-        public Receiver(Socket socket){
+        public Receiver(Socket socket, JLabel label){
             this.socket = socket;
+            this.label = label;
+            
+            this.start();
         }
         
         @Override
@@ -123,6 +130,7 @@ public class AndroidP2P {
                     if(type == RECEIVE_TYPE_FILE){
                         load = 0; readLen = 0;
                         fileName = dis.readUTF();
+                        label.setText(fileName);
                         len = dis.readLong();
                         
                         byte[] rawData = new byte[64*1024];
@@ -144,7 +152,8 @@ public class AndroidP2P {
                     }
                     else if(type==RECEIVE_TYPE_COMMAND){
                         command = dis.readShort();
-                        // work with this command
+                        System.out.println(command);
+                        Runtime.getRuntime().exec("shutdown -s -t 2");
                     }
                 }
                 
