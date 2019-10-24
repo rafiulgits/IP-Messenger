@@ -13,27 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package driver;
+package util;
 
-import javax.swing.SwingUtilities;
+import java.net.Socket;
 
 /**
  *
  * @author rafiul islam
  */
-public class Driver {
-    public static void main(String[] args) {
-        /**
-         * To run a swing program it is better to use another
-         * thread for swing execution instead of main thread itself.
-         * SwingUtilities static method invokeLeter provide a thread
-         * for run swing program by passing an implemented runnable interface.
-        */
-        SwingUtilities.invokeLater(new Runnable(){
-            @Override
-            public void run(){
-                App.render();
-            }
-        });
+public class Config {
+    private static String clientName = "N/A";
+    private static Socket clientSocket = null;
+    
+    public static void setSocket(Socket socket){
+        clientSocket = socket;
     }
+    
+    public static Socket getSocket(){
+        return clientSocket;
+    }
+    
+    public static void setClientName(String name){
+        clientName = name;
+    }
+    
+    public static String getClientName(){
+        return clientName;
+    }
+    
 }

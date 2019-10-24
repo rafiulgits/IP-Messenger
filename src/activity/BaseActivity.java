@@ -13,27 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package driver;
+package activity;
 
-import javax.swing.SwingUtilities;
+import java.awt.Color;
+import java.awt.Font;
+import javax.swing.JPanel;
 
 /**
  *
  * @author rafiul islam
  */
-public class Driver {
-    public static void main(String[] args) {
-        /**
-         * To run a swing program it is better to use another
-         * thread for swing execution instead of main thread itself.
-         * SwingUtilities static method invokeLeter provide a thread
-         * for run swing program by passing an implemented runnable interface.
-        */
-        SwingUtilities.invokeLater(new Runnable(){
-            @Override
-            public void run(){
-                App.render();
-            }
-        });
+public abstract class BaseActivity extends JPanel{
+    
+    public BaseActivity(){
+        initialConfiguration();
     }
+   
+    void initialConfiguration(){
+        this.setLayout(null);
+        this.setBackground(Color.LIGHT_GRAY);
+        this.setBounds(0, 100, 350, 420);
+    }
+    
+    public abstract void setupComponent();
 }

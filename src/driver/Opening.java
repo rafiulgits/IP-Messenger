@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 rafiul islam.
+ * Copyright 2019 rafiul islam.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,8 +35,10 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import net.TCPServer;
 import panel.AndroidPanel;
 import panel.ChatPanel;
+import util.Config;
 
 /**
  *
@@ -262,27 +264,26 @@ public class Opening extends JPanel{
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(opClient.isSelected()){
-                    try {
-                        /**
-                         * For request to another chat box there need a socket.Here this socket
-                         * will try to make connection with given IP's port and after accepted 
-                         * by the sever ChatPanel will call for messaging view.
-                         */
+                    /**
+                     * For request to another chat box there need a socket.Here this socket
+                     * will try to make connection with given IP's port and after accepted 
+                     * by the sever ChatPanel will call for messaging view.
+                     */
                         
-                        // check the name 
-                        String name = nameField.getText().trim();
-                        if(! isAValidName(name))
-                            return;
-                        
-                        int port = Integer.parseInt(portField.getText());
-                        Socket socket = new Socket(ipField.getText(), port);
+                    // check the name 
+                    String name = nameField.getText().trim();
+                    Config.setClientName(name);
+                    int port = Integer.parseInt(portField.getText());
+//                    String host = InetAddress.getLocalHost().getHostAddress();
+                    TCPServer server = new TCPServer(port);
+                    Socket socket = server.connect();
+                    if(socket != null){
                         new ChatPanel(frame, socket , name, false);
-                        
-                    } catch (IOException ex) {
+                    }else{
                         /**
                          * For any error POP up window will display the error message
                          */
-                        JOptionPane.showMessageDialog(null, ex);
+                        JOptionPane.showMessageDialog(null, "Unable to connect");
                     }
                 }
                 else if(opServer.isSelected()){

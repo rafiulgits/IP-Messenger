@@ -13,27 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package driver;
+package net;
 
-import javax.swing.SwingUtilities;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
 
 /**
  *
  * @author rafiul islam
  */
-public class Driver {
-    public static void main(String[] args) {
-        /**
-         * To run a swing program it is better to use another
-         * thread for swing execution instead of main thread itself.
-         * SwingUtilities static method invokeLeter provide a thread
-         * for run swing program by passing an implemented runnable interface.
-        */
-        SwingUtilities.invokeLater(new Runnable(){
-            @Override
-            public void run(){
-                App.render();
-            }
-        });
+public class TCPServer implements Connection{
+    
+    private int mPort;
+    
+    public TCPServer(int pPort){
+        mPort = pPort;
+    }
+    
+    @Override
+    public Socket connect(){
+        try{
+            ServerSocket serverSocket = new ServerSocket(mPort);
+            Socket socket = serverSocket.accept();
+            return socket;
+        } catch(IOException ex){
+            return null;
+        }
     }
 }

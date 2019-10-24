@@ -15,25 +15,24 @@
  */
 package driver;
 
-import javax.swing.SwingUtilities;
+import activity.BaseActivity;
 
 /**
  *
  * @author rafiul islam
  */
-public class Driver {
-    public static void main(String[] args) {
-        /**
-         * To run a swing program it is better to use another
-         * thread for swing execution instead of main thread itself.
-         * SwingUtilities static method invokeLeter provide a thread
-         * for run swing program by passing an implemented runnable interface.
-        */
-        SwingUtilities.invokeLater(new Runnable(){
-            @Override
-            public void run(){
-                App.render();
-            }
-        });
+public class App {
+    
+    private static Window window = new Window();
+    
+    public static void render(){
+        if(window == null){
+            window = new Window();
+        }
+        window.show();
+    }
+    
+    public static void switchContent(BaseActivity activity){
+        window.updateContent(activity);
     }
 }

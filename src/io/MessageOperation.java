@@ -13,27 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package driver;
-
-import javax.swing.SwingUtilities;
+package io;
 
 /**
  *
  * @author rafiul islam
  */
-public class Driver {
-    public static void main(String[] args) {
-        /**
-         * To run a swing program it is better to use another
-         * thread for swing execution instead of main thread itself.
-         * SwingUtilities static method invokeLeter provide a thread
-         * for run swing program by passing an implemented runnable interface.
-        */
-        SwingUtilities.invokeLater(new Runnable(){
-            @Override
-            public void run(){
-                App.render();
-            }
-        });
+public class MessageOperation implements IOOperation<String>{
+    
+    @Override
+    public void send(String message){
+        
+    }
+    
+    @Override 
+    public String receive(){
+        return "";
     }
 }
