@@ -16,11 +16,10 @@
 package driver;
 
 import activity.BaseActivity;
-import java.awt.Color;
+import activity.WelcomeActivity;
 import java.awt.Container;
 import java.awt.Dimension;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 
 /**
  *
@@ -29,20 +28,21 @@ import javax.swing.JPanel;
 class Window {
     private JFrame windowFrame;
     private Container container;
-//    private JPanel contentPanel;
+    private BaseActivity currentActivity;
     
     Window(){
+        windowFrame = new JFrame("IP Messenger");
         windowFrame.setPreferredSize(new Dimension(350, 600));
         windowFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         windowFrame.setResizable(false);
         container = windowFrame.getContentPane();
         
-//        contentPanel.setLayout(null);
-//        contentPanel.setBackground(Color.LIGHT_GRAY);
-//        contentPanel.setBounds(0, 100, 350, 420);
-    }
-    
+    }    
     void show(){
+        currentActivity = new WelcomeActivity();
+        container.add(currentActivity);
+        container.repaint();
+        windowFrame.pack();
         windowFrame.setVisible(true);
     }
     
@@ -54,9 +54,10 @@ class Window {
     
     
     void updateContent(BaseActivity activity){
-        container.removeAll();
+        container.remove(currentActivity);
         container.add(activity);
         container.repaint();
+        windowFrame.pack();
     }
     
 }

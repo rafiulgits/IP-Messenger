@@ -29,19 +29,19 @@ import javax.swing.JTextField;
  *
  * @author rafiul islam
  */
-public class Group extends BaseActivity{
+public class UDPSetupActivity extends AbstractIndex{
 
-    private Font font;
     private JRadioButton optionServer, optionClient;
-    JTextField ipInputField, portInputField, usernameInputField;
+    private JTextField ipInputField, portInputField, usernameInputField;
     
-    public Group(){
+    public UDPSetupActivity(){
         super();
-        font = new Font("arial",Font.BOLD, 15);
+        
     }
     
     @Override
-    public void setupComponent() {
+    public void setContent() {
+        
         setupOptions();
         setupForm();
         setupRequest();
@@ -68,8 +68,8 @@ public class Group extends BaseActivity{
         /**
          * add these radio buttons on many-many panel.
          */
-        this.add(optionServer);
-        this.add(optionClient);
+        contentPanel.add(optionServer);
+        contentPanel.add(optionClient);
         
         optionServer.addActionListener(new ActionListener() {
             @Override
@@ -98,17 +98,17 @@ public class Group extends BaseActivity{
         JLabel ipLabel = new JLabel("IP");
         ipLabel.setFont(font);
         ipLabel.setBounds(20, 200, 80, 40);
-        this.add(ipLabel);
+        contentPanel.add(ipLabel);
         
         JLabel portLabel = new JLabel("PORT");
         portLabel.setFont(font);
         portLabel.setBounds(20, 250, 100, 40);
-        this.add(portLabel);
+        contentPanel.add(portLabel);
         
         JLabel nameLabel = new JLabel("Name");
         nameLabel.setFont(font);
         nameLabel.setBounds(20,300,100,40);
-        this.add(nameLabel);
+        contentPanel.add(nameLabel);
         
         /**
          * Edit box for input IP, port and username.
@@ -116,25 +116,25 @@ public class Group extends BaseActivity{
         ipInputField = new JTextField("localhost");
         ipInputField.setBounds(105, 200, 180, 40);
         ipInputField.setFont(font);
-        this.add(ipInputField);
+        contentPanel.add(ipInputField);
         
         portInputField = new JTextField();
         portInputField.setText("9876");
         portInputField.setBounds(105, 250, 60, 40);
         portInputField.setFont(font);
-        this.add(portInputField);
+        contentPanel.add(portInputField);
         
         usernameInputField = new JTextField("annonymous");
         usernameInputField.setBounds(105, 300, 200, 30);
         usernameInputField.setFont(font);
-        this.add(usernameInputField);
+        contentPanel.add(usernameInputField);
     }
     
     private void setupRequest(){
         JButton requst = new JButton("Request");
         requst.setFont(font);
         requst.setBounds(100, 350, 150, 40);
-        this.add(requst);
+        contentPanel.add(requst);
         
         requst.addActionListener(new ActionListener() {
             @Override

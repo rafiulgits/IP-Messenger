@@ -23,7 +23,7 @@ import activity.BaseActivity;
  */
 public class App {
     
-    private static Window window = new Window();
+    private static Window window;
     
     public static void render(){
         if(window == null){

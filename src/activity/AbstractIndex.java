@@ -15,46 +15,54 @@
  */
 package activity;
 
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Font;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 /**
  *
  * @author rafiul islam
  */
-public class Index extends BaseActivity{
-
-    public Index(){
+public abstract class AbstractIndex extends BaseActivity{
+    JPanel contentPanel;
+    Font font;
+    public AbstractIndex(){
         super();
     }
     
     @Override
     public void setupComponent() {
+        contentPanel = new JPanel(); 
+        contentPanel.setBounds(0, 100, 350, 420);
+        contentPanel.setBackground(Color.LIGHT_GRAY);
+        contentPanel.setLayout(null);
+        
+        font = new Font("arial",Font.BOLD, 15);
+        contentPanel.setFont(font);
+        
+        setBackground(Color.DARK_GRAY);
         setTitle();
         setFooter();
+        setContent();
+        add(contentPanel);
     }
     
     private void setTitle(){
-        /**
-         * Set the messenger title on content page header
-         */
         ImageIcon titleIc = new ImageIcon(getClass().getResource("/icon/title.png"));
         JLabel title = new JLabel(titleIc);
         title.setBounds(50, 10, 250, 80);
-        add(title);
+        this.add(title);
     }
     
     private void setFooter(){
-        /**
-         * set the developer name as the footer of the content panel
-         */
         ImageIcon footerIc = new ImageIcon(getClass().getResource("/icon/copywriter.png"));
         JLabel footer = new JLabel(footerIc);
         footer.setBounds(25, 500, 280, 80);
-        add(footer);
+        this.add(footer);
     }
     
-    
-    
-    
+    abstract void setContent();
 }

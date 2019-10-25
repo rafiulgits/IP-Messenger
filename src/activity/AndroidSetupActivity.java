@@ -15,25 +15,15 @@
  */
 package activity;
 
-import java.awt.Color;
-import javax.swing.JPanel;
-
 /**
  *
  * @author rafiul islam
  */
-public abstract class BaseActivity extends JPanel{
-    
-    public BaseActivity(){
-        initialConfiguration();
-        setupComponent();
-    }
-   
-    void initialConfiguration(){
-        this.setLayout(null);
-        this.setBackground(Color.LIGHT_GRAY);
-        this.setBounds(0, 100, 350, 420);
+public class AndroidSetupActivity extends AbstractIndex{
+
+    @Override
+    void setContent() {
+        
     }
     
-    public abstract void setupComponent();
 }
