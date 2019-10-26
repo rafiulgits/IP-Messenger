@@ -13,12 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package util;
+package sys;
+
+import java.net.Socket;
 
 /**
  *
  * @author rafiul islam
  */
-public interface Service {
-    public void operation();
+public class Config {
+    private static String clientName = "N/A";
+    private static Socket clientSocket = null;
+    
+    public static void setSocket(Socket socket){
+        clientSocket = socket;
+    }
+    
+    public static Socket getSocket(){
+        return clientSocket;
+    }
+    
+    public static void setClientName(String name){
+        clientName = name;
+    }
+    
+    public static String getClientName(){
+        return clientName;
+    }
+    
 }

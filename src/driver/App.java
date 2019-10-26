@@ -35,4 +35,8 @@ public class App {
     public static void switchContent(BaseActivity activity){
         window.updateContent(activity);
     }
+    
+    public static void stop(){
+        window.close();
+    }
 }

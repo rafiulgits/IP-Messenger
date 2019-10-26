@@ -18,7 +18,6 @@ package net;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-
 /**
  *
  * @author rafiul islam
@@ -32,13 +31,13 @@ public class TCPServer implements Connection{
     }
     
     @Override
-    public Socket connect(){
+    public void connect(ConnectionListener connectionListener){
         try{
             ServerSocket serverSocket = new ServerSocket(mPort);
             Socket socket = serverSocket.accept();
-            return socket;
+            connectionListener.onSuccess(socket);
         } catch(IOException ex){
-            return null;
+            connectionListener.onFailed(ex);
         }
     }
 }

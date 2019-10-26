@@ -15,9 +15,13 @@
  */
 package activity;
 
+import driver.App;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.Font;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -54,6 +58,13 @@ public abstract class AbstractIndex extends BaseActivity{
         ImageIcon titleIc = new ImageIcon(getClass().getResource("/icon/title.png"));
         JLabel title = new JLabel(titleIc);
         title.setBounds(50, 10, 250, 80);
+        title.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        title.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent event){
+                App.switchContent(new WelcomeActivity());
+            }
+        });
         this.add(title);
     }
     
@@ -62,6 +73,10 @@ public abstract class AbstractIndex extends BaseActivity{
         JLabel footer = new JLabel(footerIc);
         footer.setBounds(25, 500, 280, 80);
         this.add(footer);
+    }
+    
+    public void addOnContent(Component component){
+        contentPanel.add(component);
     }
     
     abstract void setContent();

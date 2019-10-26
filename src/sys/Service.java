@@ -13,22 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package util;
+package sys;
 
 /**
  *
  * @author rafiul islam
  */
-public class Executor extends Thread{
-
-    private Service mService;
-    
-    public Executor(Service pService){
-        mService = pService;
-    } 
-    
-    @Override
-    public void run(){
-        mService.operation();
-    }
+public interface Service {
+    public void operation();
 }

@@ -15,15 +15,67 @@
  */
 package activity;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+
 /**
  *
  * @author rafiul islam
  */
 public class AndroidSetupActivity extends AbstractIndex{
-
+    private JTextField portInputField;
+    private JButton requestButton;
+    
     @Override
     void setContent() {
-        
+        setupIPView();
+        setupPortForm();
+        setupRequestButton();
     }
     
+    
+    private void setupIPView(){
+        JLabel ipLabel = new JLabel();
+        try{
+            ipLabel.setText("Your Host: "+InetAddress.getLocalHost().getHostAddress());
+        } catch(UnknownHostException ex){
+            
+        }
+        ipLabel.setFont(font);
+        ipLabel.setBounds(10, 100, 325, 100);
+        ipLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        addOnContent(ipLabel);
+    }
+    
+    private void setupPortForm(){
+        JLabel portLabel = new JLabel("PORT");
+        portLabel.setFont(font);
+        portLabel.setBounds(20, 250, 100, 40);
+        contentPanel.add(portLabel);
+        
+        portInputField = new JTextField();
+        portInputField.setText("9876");
+        portInputField.setBounds(105, 250, 60, 40);
+        portInputField.setFont(font);
+        addOnContent(portInputField);  
+    }
+    
+    private void setupRequestButton(){
+        requestButton = new JButton("Create Server");
+        requestButton.setFont(font);
+        requestButton.setBounds(100, 350, 150, 40);
+        requestButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+              // request TCP Server connection
+            }
+        });
+        addOnContent(requestButton);
+    }
 }

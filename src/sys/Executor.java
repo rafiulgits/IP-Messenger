@@ -13,32 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package util;
-
-import java.net.Socket;
+package sys;
 
 /**
  *
  * @author rafiul islam
  */
-public class Config {
-    private static String clientName = "N/A";
-    private static Socket clientSocket = null;
+public class Executor extends Thread{
+
+    private Service mService;
     
-    public static void setSocket(Socket socket){
-        clientSocket = socket;
+    public Executor(Service pService){
+        mService = pService;
+    } 
+    
+    @Override
+    public void run(){
+        mService.operation();
     }
-    
-    public static Socket getSocket(){
-        return clientSocket;
-    }
-    
-    public static void setClientName(String name){
-        clientName = name;
-    }
-    
-    public static String getClientName(){
-        return clientName;
-    }
-    
 }

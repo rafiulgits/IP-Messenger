@@ -54,7 +54,7 @@ class Window {
     
     
     void updateContent(BaseActivity activity){
-        container.remove(currentActivity);
+        container.removeAll();
         container.add(activity);
         container.repaint();
         windowFrame.pack();

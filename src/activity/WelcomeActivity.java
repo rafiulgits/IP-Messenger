@@ -68,7 +68,7 @@ public class WelcomeActivity extends AbstractIndex{
         btnAndroid.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-//                androidConnectOptions();
+                App.switchContent(new AndroidSetupActivity());
             }
         });
         contentPanel.add(btnAndroid);

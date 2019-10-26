@@ -16,7 +16,6 @@
 package activity;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.ButtonGroup;
@@ -41,9 +40,10 @@ public class UDPSetupActivity extends AbstractIndex{
     
     @Override
     public void setContent() {
-        
         setupOptions();
-        setupForm();
+        setupIPForm();
+        setupPortForm();
+        setupNameForm();
         setupRequest();
     }
     
@@ -65,69 +65,61 @@ public class UDPSetupActivity extends AbstractIndex{
         group.add(optionServer);
         group.add(optionClient);
         
-        /**
-         * add these radio buttons on many-many panel.
-         */
-        contentPanel.add(optionServer);
-        contentPanel.add(optionClient);
+        addOnContent(optionServer);
+        addOnContent(optionClient);
         
         optionServer.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                /**
-                 * For create a server socket no IP needed, so disable it.
-                 */
                 ipInputField.setEnabled(false);
             }
         });
         optionClient.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                /**
-                 * To create a socket an IP needed, so enable this field.
-                 */
                 ipInputField.setEnabled(true);
             }
         });
     }
     
-    private void setupForm(){
-        /**
-         * Label for IP, port and username edit box.
-         */
+    private void setupIPForm(){
         JLabel ipLabel = new JLabel("IP");
         ipLabel.setFont(font);
         ipLabel.setBounds(20, 200, 80, 40);
-        contentPanel.add(ipLabel);
-        
-        JLabel portLabel = new JLabel("PORT");
-        portLabel.setFont(font);
-        portLabel.setBounds(20, 250, 100, 40);
-        contentPanel.add(portLabel);
-        
-        JLabel nameLabel = new JLabel("Name");
-        nameLabel.setFont(font);
-        nameLabel.setBounds(20,300,100,40);
-        contentPanel.add(nameLabel);
-        
-        /**
-         * Edit box for input IP, port and username.
-         */
+  
         ipInputField = new JTextField("localhost");
         ipInputField.setBounds(105, 200, 180, 40);
         ipInputField.setFont(font);
-        contentPanel.add(ipInputField);
+        
+        addOnContent(ipLabel);
+        addOnContent(ipInputField);
+    }
+    
+    private void setupPortForm(){
+        JLabel portLabel = new JLabel("PORT");
+        portLabel.setFont(font);
+        portLabel.setBounds(20, 250, 100, 40);
         
         portInputField = new JTextField();
         portInputField.setText("9876");
         portInputField.setBounds(105, 250, 60, 40);
         portInputField.setFont(font);
-        contentPanel.add(portInputField);
+        
+        addOnContent(portLabel);
+        addOnContent(portInputField);
+    }
+    
+    private void setupNameForm(){
+        JLabel nameLabel = new JLabel("Name");
+        nameLabel.setFont(font);
+        nameLabel.setBounds(20,300,100,40);
         
         usernameInputField = new JTextField("annonymous");
         usernameInputField.setBounds(105, 300, 200, 30);
         usernameInputField.setFont(font);
-        contentPanel.add(usernameInputField);
+        
+        addOnContent(usernameInputField);
+        addOnContent(nameLabel);
     }
     
     private void setupRequest(){

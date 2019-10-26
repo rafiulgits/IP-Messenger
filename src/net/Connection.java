@@ -16,12 +16,12 @@
 package net;
 
 import java.io.IOException;
-import java.net.Socket;
 
 /**
  *
  * @author rafiul islam
  */
 public interface Connection {
-    public Socket connect() throws IOException;
+    public void connect(ConnectionListener connectionListener) 
+            throws IOException;
 }
