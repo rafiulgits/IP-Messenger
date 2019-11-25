@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 rafiul islam.
+ * Copyright 2019 rafiul islam.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,17 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package panel;
+package io;
 
 /**
  *
  * @author rafiul islam
  */
-public interface FileProgressListener {
-    public static final int STATE_RECEIVED = 1;
-    public static final int STATE_SENT = 0;
-    public static final int DONE = -1;
+public class Handler {
+    BroadcasterReceiver broadcasterReceiver;
     
-    public void onFileProgress(int progress);
-    public void onFileFinish(int state);
+    public Handler(BroadcasterReceiver broadcasterReceiver){
+        this.broadcasterReceiver = broadcasterReceiver;
+    }
+    
+    public void send(int code, Object data){
+        broadcasterReceiver.onReceive(code, data);
+    }
 }

@@ -23,10 +23,16 @@ public class Executor extends Thread{
 
     private Service mService;
     
-    public Executor(Service pService){
+    private Executor(Service pService){
         mService = pService;
     } 
     
+    public static Executor execute(Service pService){
+       Executor executor = new Executor(pService);
+       executor.start();
+       return executor;
+    }
+        
     @Override
     public void run(){
         mService.operation();

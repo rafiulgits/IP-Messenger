@@ -19,15 +19,6 @@ package io;
  *
  * @author rafiul islam
  */
-public class MessageOperation implements IOOperation<String>{
-    
-    @Override
-    public void send(String message){
-        
-    }
-    
-    @Override 
-    public String receive(){
-        return "";
-    }
+public interface BroadcasterReceiver {
+    public void onReceive(int code, Object data);
 }

@@ -15,6 +15,7 @@
  */
 package activity;
 
+import driver.App;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -142,12 +143,13 @@ public class TCPSetupActivity extends AbstractIndex{
                 
             }
         });
+        addOnContent(requst);
     }
     
     private void clientRequest(){
         String host = ipInputField.getText();
-        int port = Integer.getInteger(portInputField.getText());
-        String username = usernameInputField.getName();
+        int port = Integer.parseInt(portInputField.getText());
+        String username = usernameInputField.getText();
         TCPClient client = new TCPClient(host, port);
         client.connect(new ConnectionListener() {
             @Override
@@ -155,6 +157,7 @@ public class TCPSetupActivity extends AbstractIndex{
                 Config.setSocket(socket);
                 Config.setClientName(username);
                 // Switch Activity
+                App.switchContent(new TCPChat());
             }
 
             @Override
@@ -165,7 +168,7 @@ public class TCPSetupActivity extends AbstractIndex{
     }
     
     private void serverRequest(){
-        int port = Integer.getInteger(portInputField.getText());
+        int port = Integer.parseInt(portInputField.getText());
         String username = usernameInputField.getText();
         TCPServer server = new TCPServer(port);
         server.connect(new ConnectionListener() {
@@ -174,6 +177,7 @@ public class TCPSetupActivity extends AbstractIndex{
                 Config.setSocket(socket);
                 Config.setClientName(username);
                 // switch Activity
+                App.switchContent(new TCPChat());
             }
 
             @Override
