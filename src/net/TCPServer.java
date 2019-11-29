@@ -15,29 +15,15 @@
  */
 package net;
 
-import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
 /**
  *
  * @author rafiul islam
  */
-public class TCPServer implements Connection{
-    
-    private int mPort;
+abstract class TCPServer implements Connection{
+ 
+    protected int mPort;
     
     public TCPServer(int pPort){
         mPort = pPort;
-    }
-    
-    @Override
-    public void connect(ConnectionListener connectionListener){
-        try{
-            ServerSocket serverSocket = new ServerSocket(mPort);
-            Socket socket = serverSocket.accept();
-            connectionListener.onSuccess(socket);
-        } catch(IOException ex){
-            connectionListener.onFailed(ex);
-        }
     }
 }

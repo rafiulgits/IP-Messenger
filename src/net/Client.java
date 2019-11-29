@@ -13,12 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io;
+package net;
 
+import java.io.IOException;
+import java.net.Socket;
 /**
  *
  * @author rafiul islam
  */
-public interface BroadcasterReceiver {
-    public void onReceive(int code, Object data);
+public class Client implements Connection{
+    
+    private String mHost;
+    private int mPort;
+    
+    public Client(String pHost, int pPort){
+        mHost = pHost;
+        mPort = pPort;
+    }
+    
+    @Override
+    public void connect(ConnectionListener connectionListener){
+        try{
+            Socket socket = new Socket(mHost, mPort);
+            connectionListener.onSuccess(socket);
+        } catch(IOException ex){
+            connectionListener.onFailed(ex);
+        }
+    }
 }

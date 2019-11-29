@@ -27,26 +27,27 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
+import net.Client;
 import net.ConnectionListener;
-import net.TCPClient;
-import net.TCPServer;
+import net.UnicastServer;
 import sys.Config;
 
 /**
  *
  * @author rafiul islam
  */
-public class TCPSetupActivity extends AbstractIndex{
-   
-    private JTextField ipInputField, portInputField, usernameInputField;
+public class GroupSetupActivity extends AbstractIndex{
+
     private JRadioButton optionServer, optionClient;
+    private JTextField ipInputField, portInputField, usernameInputField;
     
-    public TCPSetupActivity(){
+    public GroupSetupActivity(){
         super();
+        
     }
     
     @Override
-    public void setContent(){
+    public void setContent() {
         setupOptions();
         setupIPForm();
         setupPortForm();
@@ -55,22 +56,25 @@ public class TCPSetupActivity extends AbstractIndex{
     }
     
     private void setupOptions(){
-        optionServer = new JRadioButton("Create a new chat box");
+        optionServer = new JRadioButton("Start a group chat");
         optionServer.setBounds(50, 10, 200, 50);
         optionServer.setFont(font);
         optionServer.setBackground(Color.LIGHT_GRAY);
         
-        optionClient = new JRadioButton("Request to a chat box");
-        optionClient.setBackground(Color.LIGHT_GRAY);
+        optionClient = new JRadioButton("Join a group chat");
         optionClient.setFont(font);
+        optionClient.setBackground(Color.LIGHT_GRAY);
         optionClient.setBounds(50, 80, 200, 50);
         
+        /**
+         * Join the radio buttons for one selection at a time.
+        */
         ButtonGroup group = new ButtonGroup();
         group.add(optionServer);
         group.add(optionClient);
         
-        contentPanel.add(optionServer);
-        contentPanel.add(optionClient);
+        addOnContent(optionServer);
+        addOnContent(optionClient);
         
         optionServer.addActionListener(new ActionListener() {
             @Override
@@ -90,9 +94,8 @@ public class TCPSetupActivity extends AbstractIndex{
         JLabel ipLabel = new JLabel("IP");
         ipLabel.setFont(font);
         ipLabel.setBounds(20, 200, 80, 40);
-        
-        ipInputField = new JTextField();
-        ipInputField.setText("localhost");
+  
+        ipInputField = new JTextField("localhost");
         ipInputField.setBounds(105, 200, 180, 40);
         ipInputField.setFont(font);
         
@@ -123,41 +126,41 @@ public class TCPSetupActivity extends AbstractIndex{
         usernameInputField.setBounds(105, 300, 200, 30);
         usernameInputField.setFont(font);
         
-        addOnContent(nameLabel);
         addOnContent(usernameInputField);
+        addOnContent(nameLabel);
     }
-   
+    
     private void setupRequest(){
         JButton requst = new JButton("Request");
         requst.setFont(font);
         requst.setBounds(100, 350, 150, 40);
+        contentPanel.add(requst);
+        
         requst.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(optionClient.isSelected()){
-                    clientRequest();
+                   clientRequest();
                 }
-                else if(optionServer.isSelected()){
-                    serverRequest();
+                else{
+                    // call UDP Server
                 }
-                
             }
         });
-        addOnContent(requst);
-    }
+    }    
     
     private void clientRequest(){
         String host = ipInputField.getText();
         int port = Integer.parseInt(portInputField.getText());
         String username = usernameInputField.getText();
-        TCPClient client = new TCPClient(host, port);
+        Client client = new Client(host, port);
         client.connect(new ConnectionListener() {
             @Override
             public void onSuccess(Socket socket) {
                 Config.setSocket(socket);
                 Config.setClientName(username);
                 // Switch Activity
-                App.switchContent(new TCPChat());
+//                App.switchContent(new TCPChat());
             }
 
             @Override
@@ -170,14 +173,14 @@ public class TCPSetupActivity extends AbstractIndex{
     private void serverRequest(){
         int port = Integer.parseInt(portInputField.getText());
         String username = usernameInputField.getText();
-        TCPServer server = new TCPServer(port);
+        UnicastServer server = new UnicastServer(port);
         server.connect(new ConnectionListener() {
             @Override
             public void onSuccess(Socket socket) {
                 Config.setSocket(socket);
                 Config.setClientName(username);
                 // switch Activity
-                App.switchContent(new TCPChat());
+//                App.switchContent(new TCPChat());
             }
 
             @Override

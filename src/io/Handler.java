@@ -20,13 +20,18 @@ package io;
  * @author rafiul islam
  */
 public class Handler {
-    BroadcasterReceiver broadcasterReceiver;
+    CallBack mCallBack;
     
-    public Handler(BroadcasterReceiver broadcasterReceiver){
-        this.broadcasterReceiver = broadcasterReceiver;
+    public Handler(CallBack pCallBack){
+        mCallBack = pCallBack;
     }
     
     public void send(int code, Object data){
-        broadcasterReceiver.onReceive(code, data);
+        mCallBack.onCallBack(code, data);
+    
     }
+    
+    public static interface CallBack {
+        public void onCallBack(int code, Object data);
+    } 
 }

@@ -15,31 +15,38 @@
  */
 package activity;
 
+import driver.App;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.net.Socket;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
+import net.ConnectionListener;
+import net.Client;
+import net.UnicastServer;
+import sys.Config;
 
 /**
  *
  * @author rafiul islam
  */
-public class UDPSetupActivity extends AbstractIndex{
-
-    private JRadioButton optionServer, optionClient;
+public class UnicastSetupActivity extends AbstractIndex{
+   
     private JTextField ipInputField, portInputField, usernameInputField;
+    private JRadioButton optionServer, optionClient;
     
-    public UDPSetupActivity(){
+    public UnicastSetupActivity(){
         super();
-        
     }
     
     @Override
-    public void setContent() {
+    public void setContent(){
         setupOptions();
         setupIPForm();
         setupPortForm();
@@ -48,25 +55,22 @@ public class UDPSetupActivity extends AbstractIndex{
     }
     
     private void setupOptions(){
-        optionServer = new JRadioButton("Start a group chat");
+        optionServer = new JRadioButton("Create a new chat box");
         optionServer.setBounds(50, 10, 200, 50);
         optionServer.setFont(font);
         optionServer.setBackground(Color.LIGHT_GRAY);
         
-        optionClient = new JRadioButton("Join a group chat");
-        optionClient.setFont(font);
+        optionClient = new JRadioButton("Request to a chat box");
         optionClient.setBackground(Color.LIGHT_GRAY);
+        optionClient.setFont(font);
         optionClient.setBounds(50, 80, 200, 50);
         
-        /**
-         * Join the radio buttons for one selection at a time.
-        */
         ButtonGroup group = new ButtonGroup();
         group.add(optionServer);
         group.add(optionClient);
         
-        addOnContent(optionServer);
-        addOnContent(optionClient);
+        contentPanel.add(optionServer);
+        contentPanel.add(optionClient);
         
         optionServer.addActionListener(new ActionListener() {
             @Override
@@ -86,8 +90,9 @@ public class UDPSetupActivity extends AbstractIndex{
         JLabel ipLabel = new JLabel("IP");
         ipLabel.setFont(font);
         ipLabel.setBounds(20, 200, 80, 40);
-  
-        ipInputField = new JTextField("localhost");
+        
+        ipInputField = new JTextField();
+        ipInputField.setText("localhost");
         ipInputField.setBounds(105, 200, 180, 40);
         ipInputField.setFont(font);
         
@@ -118,26 +123,67 @@ public class UDPSetupActivity extends AbstractIndex{
         usernameInputField.setBounds(105, 300, 200, 30);
         usernameInputField.setFont(font);
         
-        addOnContent(usernameInputField);
         addOnContent(nameLabel);
+        addOnContent(usernameInputField);
     }
-    
+   
     private void setupRequest(){
         JButton requst = new JButton("Request");
         requst.setFont(font);
         requst.setBounds(100, 350, 150, 40);
-        contentPanel.add(requst);
-        
         requst.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(optionClient.isSelected()){
-                    // call UDP Client
+                    clientRequest();
                 }
-                else{
-                    // call UDP Server
+                else if(optionServer.isSelected()){
+                    serverRequest();
                 }
+                
             }
         });
-    }    
+        addOnContent(requst);
+    }
+    
+    private void clientRequest(){
+        String host = ipInputField.getText();
+        int port = Integer.parseInt(portInputField.getText());
+        String username = usernameInputField.getText();
+        Client client = new Client(host, port);
+        client.connect(new ConnectionListener() {
+            @Override
+            public void onSuccess(Socket socket) {
+                Config.setSocket(socket);
+                Config.setClientName(username);
+                // Switch Activity
+                App.switchContent(new TCPChat());
+            }
+
+            @Override
+            public void onFailed(IOException exception) {
+                JOptionPane.showMessageDialog(null, exception.toString());
+            }
+        });
+    }
+    
+    private void serverRequest(){
+        int port = Integer.parseInt(portInputField.getText());
+        String username = usernameInputField.getText();
+        UnicastServer server = new UnicastServer(port);
+        server.connect(new ConnectionListener() {
+            @Override
+            public void onSuccess(Socket socket) {
+                Config.setSocket(socket);
+                Config.setClientName(username);
+                // switch Activity
+                App.switchContent(new TCPChat());
+            }
+
+            @Override
+            public void onFailed(IOException exception) {
+                JOptionPane.showMessageDialog(null, exception.toString());
+            }
+        });
+    }
 }

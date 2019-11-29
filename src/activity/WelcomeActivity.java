@@ -42,7 +42,7 @@ public class WelcomeActivity extends AbstractIndex{
         btnSingle.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                App.switchContent(new TCPSetupActivity());
+                App.switchContent(new UnicastSetupActivity());
             }
         });
         contentPanel.add(btnSingle);
@@ -55,7 +55,7 @@ public class WelcomeActivity extends AbstractIndex{
         btnGroup.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                App.switchContent(new UDPSetupActivity());
+                App.switchContent(new GroupSetupActivity());
             }
         });
         contentPanel.add(btnGroup);

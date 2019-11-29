@@ -16,28 +16,28 @@
 package net;
 
 import java.io.IOException;
+import java.net.ServerSocket;
 import java.net.Socket;
+
 /**
  *
  * @author rafiul islam
  */
-public class TCPClient implements Connection{
-    
-    private String mHost;
-    private int mPort;
-    
-    public TCPClient(String pHost, int pPort){
-        mHost = pHost;
-        mPort = pPort;
+public class UnicastServer extends TCPServer{
+
+    public UnicastServer(int pPort){
+        super(pPort);
     }
     
     @Override
     public void connect(ConnectionListener connectionListener){
         try{
-            Socket socket = new Socket(mHost, mPort);
+            ServerSocket serverSocket = new ServerSocket(mPort);
+            Socket socket = serverSocket.accept();
             connectionListener.onSuccess(socket);
         } catch(IOException ex){
             connectionListener.onFailed(ex);
         }
     }
+    
 }

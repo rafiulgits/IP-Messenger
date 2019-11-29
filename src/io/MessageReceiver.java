@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net;
+package io;
 
-import io.Handler;
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.net.Socket;
 import sys.Config;
 import sys.Service;
 
@@ -30,6 +30,8 @@ public class MessageReceiver implements Service{
     public static final int CONNECTION_FAILED = 500;
     public static final int MESSAGE_RECEIVE = 200;
     
+    private Socket mSocket;
+    
     private DataInputStream dataInputStream;
     private volatile Handler mHandler;
     
@@ -38,10 +40,17 @@ public class MessageReceiver implements Service{
         dataInputStream = new DataInputStream(Config.getSocket().getInputStream());
     }
     
+    public void setSocket(Socket pSocket){
+        mSocket = pSocket;
+    }
+    
     @Override
     public void operation() {
         String message = "";
-        while(Config.getSocket() != null){
+        if(mSocket == null){
+            mSocket = Config.getSocket();
+        }
+        while(mSocket != null){
             try {
                 message =  dataInputStream.readUTF();
                 mHandler.send(MESSAGE_RECEIVE, message);

@@ -16,7 +16,6 @@
 package activity;
 
 import driver.App;
-import io.BroadcasterReceiver;
 import io.Handler;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -30,7 +29,7 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import net.MessageReceiver;
+import io.MessageReceiver;
 import sys.Config;
 import sys.Executor;
 
@@ -38,7 +37,7 @@ import sys.Executor;
  *
  * @author rafiul islam
  */
-public class TCPChat extends BaseActivity implements BroadcasterReceiver{
+public class TCPChat extends BaseActivity implements Handler.CallBack{
 
     private Font font;
     private DataInputStream dataInputStream;
@@ -64,7 +63,7 @@ public class TCPChat extends BaseActivity implements BroadcasterReceiver{
     
     
     @Override
-    public void onReceive(int code, Object data){
+    public void onCallBack(int code, Object data){
         if(code == MessageReceiver.MESSAGE_RECEIVE){
             messageBox.append("\n"+(String)data);
             return;
